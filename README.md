@@ -20,15 +20,6 @@ This project demonstrates vulnerability scanning, exploitation, and remediation 
 5. Password hash cracking using John
 6. Vulnerability remediation suggestions
 
-## 📸 Screenshots
-Screenshots of scan results and successful exploits are in the `Screenshots/` folder.
-
-## 📁 Structure
-- `Screenshots/`: All attack images
-- `PasswordCrack/`: Hash files and cracked password
-- `CommandsUsed.txt`: Terminal commands
-- `Remediation.txt`: Security fixes & version comparison
-
 ## 📚 Learning Outcomes
 - Understood basic web security flaws
 - Hands-on with real exploitation tools
