@@ -42,8 +42,8 @@ Internet → Web Server (DMZ) → SIEM Server → Internal Server
 
 | VM Name | OS | Purpose | Subnet | IP Type | Size |
 |------|----|--------|--------|--------|------|
-| VM-1 Internal Server | Ubuntu 22.04 LTS | Identity & File Server | Internal | Private + Public | B-Series |
-| VM-2 Web Server | Ubuntu 22.04 LTS | Apache Web Server | DMZ | Public | B-Series |
+| VM-1 Internal Server | Ubuntu 22.04 LTS | Identity & File Server | Internal | Private + Public | D-Series |
+| VM-2 Web Server | Ubuntu 22.04 LTS | Apache Web Server | DMZ | Public | D-Series |
 | VM-3 SIEM Server | Ubuntu 22.04 LTS | Log Monitoring | Internal | Public | B-Series |
 
 ---
