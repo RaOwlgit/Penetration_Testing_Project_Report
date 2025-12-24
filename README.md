@@ -1,199 +1,155 @@
-🏗️ Minor Project – Infrastructure Deployment & Basic Logging (Azure)
-📌 Project Overview
+# Minor Project – Infrastructure Deployment & Logging (Azure)
 
-In this project, we acted as the Infrastructure Team of a simulated company and deployed a small-scale enterprise environment using Microsoft Azure (Azure for Students).
+## 1. Project Overview
 
-The infrastructure consists of three Linux-based virtual machines, deployed inside one mandatory Azure Resource Group.
-This phase focuses only on infrastructure deployment and basic logging.
+This project demonstrates the deployment of a basic enterprise-style infrastructure on **Microsoft Azure**.  
+The objective is to design a small network, deploy virtual machines, and enable basic logging for monitoring.
 
-⚠️ No security hardening was performed intentionally, so the environment remains vulnerable for the Major Project (SOC & Attack Simulation).
+All resources are created inside **one Azure Resource Group**.  
+Security hardening is intentionally **not applied**, as this environment will be used for future attack and SOC simulations.
 
-🏢 Company / Resource Group Details
+---
 
-Company Name / Resource Group: Firewallis_Tech
+## 2. Cloud & Resource Details
 
-Cloud Platform: Microsoft Azure (Azure for Students)
+- **Cloud Platform:** Microsoft Azure (Azure for Students)
+- **Resource Group Name:** Firewallis_Tech
+- **Region:** East Asia
 
-Region: East Asia
+---
 
-Tenant Naming Format: YOUR_ERP_FIRST_NAME_GROUPNO
+## 3. Network Architecture
 
-All resources (VMs, VNet, Subnets, NICs, Disks, Public IPs) were created inside this single Resource Group only.
+### Virtual Network (VNet)
 
-🌐 Network Architecture
-Virtual Network (VNet)
+- **VNet Name:** Firewallis-VNet
+- **Address Space:** 10.0.0.0/16
 
-VNet Name: Firewallis-VNet
+### Subnets
 
-Address Space: 10.0.0.0/16
+| Subnet Name | Address Range | Purpose |
+|------------|--------------|--------|
+| Internal-Subnet | 10.0.1.0/24 | Internal services & SIEM |
+| DMZ-Subnet | 10.0.2.0/24 | Public-facing web server |
 
-Subnets
-Subnet Name	Address Range	Description
-Internal-Subnet	10.0.1.0/24	Internal services & SIEM
-DMZ-Subnet	10.0.2.0/24	Public-facing Web Server
-Network Flow
-Internet
-   |
-   v
-Web Server (VM-2) [DMZ Subnet]
-   |
-   v
-SIEM Server (VM-3) [Internal Subnet]
-   |
-   v
-Internal Server (VM-1) [Internal Subnet]
+### Network Flow
 
+Internet → Web Server (DMZ) → SIEM Server → Internal Server
 
-External users access the Web Server (DMZ)
+---
 
-Logs are generated and forwarded to SIEM
+## 4. Virtual Machine Inventory
 
-Internal services are hosted inside Internal Subnet
+| VM Name | OS | Purpose | Subnet | IP Type | Size |
+|------|----|--------|--------|--------|------|
+| VM-1 Internal Server | Ubuntu 22.04 LTS | Identity & File Server | Internal | Private + Public | B-Series |
+| VM-2 Web Server | Ubuntu 22.04 LTS | Apache Web Server | DMZ | Public | B-Series |
+| VM-3 SIEM Server | Ubuntu 22.04 LTS | Log Monitoring | Internal | Public | B-Series |
 
-🖥️ Virtual Machine Inventory
-VM Name	OS	Purpose	IP Type	Subnet	Size
-Internal-Server	Ubuntu 22.04 LTS	Identity & File Server	Private + Public	Internal	B-series
-Web-Server	Ubuntu 22.04 LTS	Apache Web Server	Public	DMZ	B-series
-SIEM-Server	Ubuntu 22.04 LTS	SIEM & Analyst Workstation	Public	Internal	B-series
+---
 
-Exact IP addresses and sizes are visible in screenshots.
+## 5. VM Roles & Configuration
 
-🔐 VM Roles & Configuration
-🔹 VM-1: Internal Server
+### VM 1 – Internal Server
+**Roles:**
+- Identity Management (LDAP / FreeIPA concept)
+- File Server (Samba)
+- Internal service hosting
 
-Roles
+**Installed Services:**
+- LDAP
+- Samba
+- System logging services
 
-Identity Management (LDAP – FreeIPA simulation)
+**Purpose:**  
+Simulates internal corporate identity and file management.
 
-File Server (Samba)
+---
 
-Internal service hosting
+### VM 2 – Web Server (DMZ)
+**Roles:**
+- Apache Web Server
+- Hosts a simple web page
+- Generates access and error logs
 
-Installed Services
+**Installed Services:**
+- Apache2
 
-slapd (LDAP)
+**Purpose:**  
+Simulates an external-facing vulnerable web server.
 
-ldap-utils
+---
 
-samba
+### VM 3 – SIEM + Analyst Workstation
+**Roles:**
+- Central log collection
+- Security monitoring
 
-Purpose
-Simulates centralized user identity management and file sharing inside an organization.
+**Installed Tool:**
+- Wazuh (Free SIEM)
 
-🌍 VM-2: Web Server (DMZ)
+**Purpose:**  
+Collects and analyzes logs from internal and web servers.
 
-Roles
+---
 
-Apache Web Server
+## 6. Logging Summary
 
-Static web page hosting
+### Logs Generated
 
-Log generation
+| VM | Logs |
+|----|-----|
+| Internal Server | auth.log, syslog |
+| Web Server | access.log, error.log, syslog |
+| SIEM Server | Wazuh service logs |
 
-Installed Services
+### Logs Forwarded to SIEM
+- Authentication logs
+- System logs
+- Web access and error logs
 
-apache2
+---
 
-Purpose
-Simulates an external-facing vulnerable server for future attack scenarios.
+## 7. Screenshot Proof
 
-🛡️ VM-3: SIEM + Analyst Workstation
+Screenshots included in this repository show:
+- Azure Resource Group
+- Virtual Network & Subnets
+- All Virtual Machines
+- SSH login (`whoami` command)
+- Apache web page
+- Wazuh dashboard/services
 
-Roles
+All screenshots clearly display the **student Azure account name**.
 
-Central log collection
+---
 
-Security monitoring & analysis
+## 8. Security Note
 
-SIEM Tool
+No security hardening was applied:
+- No firewall tuning
+- No IDS/IPS rules
+- No password policies
 
-Wazuh (All-in-One – Free Edition)
+This is intentional for future attack simulation and SOC analysis.
 
-Components
+---
 
-Wazuh Manager
+## 9. Conclusion
 
-Wazuh Indexer
+The project successfully demonstrates:
+- Cloud infrastructure deployment
+- Network segmentation (Internal + DMZ)
+- Linux server configuration
+- Web server hosting
+- Centralized logging using SIEM
 
-Wazuh Dashboard
+This infrastructure is ready for the next phase of security testing and monitoring.
 
-Note
-Dashboard may load slowly due to limited Azure Student VM resources, which is expected.
+---
 
-📜 Logging Summary
-Logs Generated
-VM	Logs
-Internal-Server	syslog, auth.log
-Web-Server	access.log, error.log, syslog
-SIEM-Server	Wazuh internal logs
-Logs Forwarded to SIEM
+## Author
 
-Authentication logs
-
-System logs
-
-Web access & error logs
-
-📸 Screenshots Proof
-
-All screenshots clearly show:
-
-Azure Portal
-
-Resource Group name
-
-Student Azure account name
-
-SSH login proof (whoami command)
-
-📂 Screenshots Folder Structure
-screenshots/
-├── resource-group.png
-├── vnet-subnets.png
-├── vm1-ldap-samba.png
-├── vm2-apache-page.png
-├── apache-logs.png
-├── vm3-wazuh-services.png
-
-🚫 Security Hardening (Intentionally Not Done)
-
-The following were NOT implemented as per project rules:
-
-Firewall rules
-
-SSH hardening
-
-Password policies
-
-IDS/IPS tuning
-
-Security baselines
-
-This is intentional so vulnerabilities can be exploited in the Major Project.
-
-🎯 Learning Outcomes
-
-Azure cloud infrastructure deployment
-
-Network segmentation using VNet & subnets
-
-Linux server administration
-
-Web server deployment
-
-Log generation and monitoring basics
-
-SIEM deployment fundamentals
-
-✅ Project Status
-
-✔ Infrastructure deployed
-✔ Logging enabled
-✔ Screenshots captured
-✔ Ready for submission
-
-📌 Author
-
-Student Name: Your Name
-Course: Cyber Security
-Project Type: Minor Project – Infrastructure & Logging
+**Name:** Your Name  
+**Course:** Cyber Security  
+**Project Type:** Minor Project – Infrastructure & Logging
