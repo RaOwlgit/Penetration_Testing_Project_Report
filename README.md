@@ -150,6 +150,6 @@ This infrastructure is ready for the next phase of security testing and monitori
 
 ## Author
 
-**Name:** Your Name  
-**Course:** Cyber Security  
+**Name:** Rahul Chandrakar  
+**Course:** Ethical Hacking
 **Project Type:** Minor Project – Infrastructure & Logging
