@@ -1,155 +1,99 @@
-# Minor Project – Infrastructure Deployment & Logging (Azure)
+# 🌐 Minor Project: Infrastructure Deployment & Logging (Azure)
 
-## 1. Project Overview
+![Azure](https://img.shields.io/badge/azure-%230072C6.svg?style=for-the-badge&logo=microsoftazure&logoColor=white)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-E94333?style=for-the-badge&logo=ubuntu&logoColor=white)
+![Apache](https://img.shields.io/badge/Apache-D22128?style=for-the-badge&logo=Apache&logoColor=white)
+![Logging](https://img.shields.io/badge/Logging-Enabled-brightgreen?style=for-the-badge)
 
-This project demonstrates the deployment of a basic enterprise-style infrastructure on **Microsoft Azure**.  
-The objective is to design a small network, deploy virtual machines, and enable basic logging for monitoring.
-
-All resources are created inside **one Azure Resource Group**.  
-Security hardening is intentionally **not applied**, as this environment will be used for future attack and SOC simulations.
-
----
-
-## 2. Cloud & Resource Details
-
-- **Cloud Platform:** Microsoft Azure (Azure for Students)
-- **Resource Group Name:** Firewallis_Tech
-- **Region:** East Asia
+## 📌 Project Overview
+This project demonstrates the deployment of a functional **enterprise-style infrastructure** on Microsoft Azure. The primary objective was to design a segmented network, deploy Linux-based virtual machines, and establish a centralized logging pipeline for future security monitoring.
 
 ---
 
-## 3. Network Architecture
+## ☁️ Cloud & Resource Details
+* **Platform:** Microsoft Azure (Azure for Students)
+* **Resource Group:** `Firewallis_Tech`
+* **Region:** East Asia
+* **Status:** Deployment Complete / Hardening Pending (Intentional)
 
-### Virtual Network (VNet)
+---
 
-- **VNet Name:** Firewallis-VNet
-- **Address Space:** 10.0.0.0/16
+## 🏗️ Network Architecture
+The environment uses a **Virtual Network (VNet)** approach to simulate real-world segmentation between public-facing and internal assets.
 
-### Subnets
+* **VNet Name:** `Firewallis-VNet`
+* **Address Space:** `10.0.0.0/16`
 
+### Subnet Segmentation
 | Subnet Name | Address Range | Purpose |
-|------------|--------------|--------|
-| Internal-Subnet | 10.0.1.0/24 | Internal services & SIEM |
-| DMZ-Subnet | 10.0.2.0/24 | Public-facing web server |
-
-### Network Flow
-
-Internet → Web Server (DMZ) → SIEM Server → Internal Server
+|:--- |:--- |:--- |
+| **Internal-Subnet** | `10.0.1.0/24` | Identity Services, File Storage & SIEM |
+| **DMZ-Subnet** | `10.0.2.0/24` | Public-facing Web Server |
 
 ---
 
-## 4. Virtual Machine Inventory
+## 🖥️ Virtual Machine Inventory
+Three Ubuntu instances were deployed to serve specific enterprise roles:
 
-| VM Name | OS | Purpose | Subnet | IP Type | Size |
-|------|----|--------|--------|--------|------|
-| VM-1 Internal Server | Ubuntu 22.04 LTS | Identity & File Server | Internal | Private + Public | D-Series |
-| VM-2 Web Server | Ubuntu 22.04 LTS | Apache Web Server | DMZ | Public | D-Series |
-| VM-3 SIEM Server | Ubuntu 22.04 LTS | Log Monitoring | Internal | Public | B-Series |
-
----
-
-## 5. VM Roles & Configuration
-
-### VM 1 – Internal Server
-**Roles:**
-- Identity Management (LDAP / FreeIPA concept)
-- File Server (Samba)
-- Internal service hosting
-
-**Installed Services:**
-- LDAP
-- Samba
-- System logging services
-
-**Purpose:**  
-Simulates internal corporate identity and file management.
+| VM Name | OS | Role | Subnet | IP Type |
+|:--- |:--- |:--- |:--- |:--- |
+| **VM-1 (Internal)** | Ubuntu 22.04 | Identity & File Server | Internal | Private + Public |
+| **VM-2 (Web Server)** | Ubuntu 22.04 | Apache Web Server | DMZ | Public |
+| **VM-3 (SIEM)** | Ubuntu 22.04 | Log Monitoring (Wazuh) | Internal | Public |
 
 ---
 
-### VM 2 – Web Server (DMZ)
-**Roles:**
-- Apache Web Server
-- Hosts a simple web page
-- Generates access and error logs
+## 🛠️ Service Configuration
 
-**Installed Services:**
-- Apache2
+### 🔹 VM 1: Internal Server
+* **Identity Management:** Simulates LDAP/FreeIPA concepts for corporate identity.
+* **File Services:** Configured with **Samba** for internal file sharing.
+* **Logging:** Captures authentication and system-level events.
 
-**Purpose:**  
-Simulates an external-facing vulnerable web server.
+### 🔹 VM 2: Web Server (DMZ)
+* **Web Engine:** **Apache2** hosting a baseline landing page.
+* **Log Generation:** Tracks HTTP access and error logs to identify potential web-based attacks.
 
----
-
-### VM 3 – SIEM + Analyst Workstation
-**Roles:**
-- Central log collection
-- Security monitoring
-
-**Installed Tool:**
-- Wazuh (Free SIEM)
-
-**Purpose:**  
-Collects and analyzes logs from internal and web servers.
+### 🔹 VM 3: SIEM + Analyst Workstation
+* **Core Tool:** **Wazuh** (XDR/SIEM).
+* **Function:** Serves as the central "brain" for collecting and visualizing logs from VM-1 and VM-2.
 
 ---
 
-## 6. Logging Summary
+## 📊 Logging & Monitoring
+A centralized logging pipeline was established to ensure full visibility of the infrastructure.
 
-### Logs Generated
-
-| VM | Logs |
-|----|-----|
-| Internal Server | auth.log, syslog |
-| Web Server | access.log, error.log, syslog |
-| SIEM Server | Wazuh service logs |
-
-### Logs Forwarded to SIEM
-- Authentication logs
-- System logs
-- Web access and error logs
+| Source VM | Logs Captured | Forwarded To |
+|:--- |:--- |:--- |
+| **Internal Server** | `auth.log`, `syslog` | Wazuh SIEM |
+| **Web Server** | `access.log`, `error.log`, `syslog` | Wazuh SIEM |
+| **SIEM Server** | Wazuh internal service logs | Local Dashboard |
 
 ---
 
-## 7. Screenshot Proof
-
-Screenshots included in this repository show:
-- Azure Resource Group
-- Virtual Network & Subnets
-- All Virtual Machines
-- SSH login (`whoami` command)
-- Apache web page
-- Wazuh dashboard/services
-
-All screenshots clearly display the **student Azure account name**.
+## ⚠️ Security Note
+> [!WARNING]
+> Security hardening (Firewall rules, password policies, IDS/IPS) has been **intentionally omitted**. This environment is a "baseline" build designed for future attack simulations, vulnerability scanning, and SOC analysis labs.
 
 ---
 
-## 8. Security Note
-
-No security hardening was applied:
-- No firewall tuning
-- No IDS/IPS rules
-- No password policies
-
-This is intentional for future attack simulation and SOC analysis.
+## 📸 Deployment Validation
+*The repository contains screenshots documenting the following:*
+* **Azure Resource Group:** Visual proof of all assets in `Firewallis_Tech`.
+* **Networking:** VNet and Subnet configuration maps.
+* **Services:** Active Apache web page and Wazuh dashboard connectivity.
+* **Identity:** `whoami` and system status via SSH (Student name visible).
 
 ---
 
-## 9. Conclusion
-
-The project successfully demonstrates:
-- Cloud infrastructure deployment
-- Network segmentation (Internal + DMZ)
-- Linux server configuration
-- Web server hosting
-- Centralized logging using SIEM
-
-This infrastructure is ready for the next phase of security testing and monitoring.
+## 🎓 Conclusion
+This minor project successfully establishes the foundation for a professional security lab. It demonstrates proficiency in:
+* Cloud resource management and networking.
+* Linux server administration (Ubuntu).
+* Deployment of critical enterprise services (Web, File, SIEM).
+* Establishing a baseline logging architecture.
 
 ---
 
-## Author
-
-**Name:** Rahul Chandrakar  
-**Course:** Ethical Hacking
-**Project Type:** Minor Project – Infrastructure & Logging
+## 👤 Author
+**Rahul Chandrakar** *Course: Ethical Hacking* *Project Type: Minor Project – Infrastructure & Logging*
